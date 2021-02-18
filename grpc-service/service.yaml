@@ -1,0 +1,10 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: greeter-service 
+spec:
+  selector:
+    app: greeter
+  ports:
+    - port: 9000
+      targetPort: 9000
