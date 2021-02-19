@@ -27,7 +27,7 @@ form.addEventListener('submit', e => {
   document.querySelector('#beforeImage').src = URL.createObjectURL(files[0]);
 
   // Open a websocket connection to the frontend socket endpoint
-  var socket = new WebSocket("ws://localhost:3000/socket");
+  var socket = new WebSocket("ws://172.104.231.81/socket");
 
   socket.onopen = function (e) {
     socket.send(files[0]);

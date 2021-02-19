@@ -1,0 +1,10 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: grayscale-service 
+spec:
+  selector:
+    app: grayscale
+  ports:
+    - port: 9000
+      targetPort: 9000

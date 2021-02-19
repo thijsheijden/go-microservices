@@ -11,6 +11,7 @@ import (
 	"net/http"
 	"os"
 
+	"frontend-service/internal/greeter"
 	"frontend-service/internal/image_service"
 
 	"github.com/gorilla/websocket"
@@ -25,20 +26,20 @@ type kubernetesTestPage struct {
 
 func indexHandler(w http.ResponseWriter, r *http.Request) {
 	// Make a quick grpc request
-	// conn, err := grpc.Dial("greeter-service:9000", grpc.WithInsecure())
-	// if err != nil {
-	// 	log.Fatalf("Failed to connect: %v", err)
-	// }
-	// defer conn.Close()
+	conn, err := grpc.Dial("greeter-service:9000", grpc.WithInsecure())
+	if err != nil {
+		log.Fatalf("Failed to connect: %v", err)
+	}
+	defer conn.Close()
 
-	// client := greeter.NewGreetingServiceClient(conn)
+	client := greeter.NewGreetingServiceClient(conn)
 
-	// response, err := client.Greeter(context.Background(), &greeter.Greeting{Message: "WASSAAAA"})
-	// if err != nil {
-	// 	log.Fatalf("Something went wrong sending an RPC: %v", err)
-	// }
+	response, err := client.Greeter(context.Background(), &greeter.Greeting{Message: "WASSAAAA"})
+	if err != nil {
+		log.Fatalf("Something went wrong sending an RPC: %v", err)
+	}
 
-	data := kubernetesTestPage{PodName: os.Getenv("POD_NAME"), NodeName: os.Getenv("NODE_NAME"), GreetingPodName: "POOP"}
+	data := kubernetesTestPage{PodName: os.Getenv("POD_NAME"), NodeName: os.Getenv("NODE_NAME"), GreetingPodName: response.GetResponse()}
 
 	template, err := template.ParseFiles("static/index.html")
 	if err != nil {
@@ -64,7 +65,7 @@ func imageHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Send this data to the image service
-	conn, err := grpc.Dial(":9000", grpc.WithInsecure())
+	conn, err := grpc.Dial("grayscale-service:9000", grpc.WithInsecure())
 	if err != nil {
 		log.Fatalf("Error dialing grpc image service: %v", err)
 	}

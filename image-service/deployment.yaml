@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: grayscale-deployment
+  labels:
+    app: grayscale
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: grayscale
+  template:
+    metadata:
+      labels:
+        app: grayscale
+    spec:
+      containers:
+      - name: grayscale
+        image: thijsheijden/image-service:latest
+        ports:
+        - containerPort: 9000
+        env:
+        - name: POD_NAME
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.name
