@@ -10,3 +10,15 @@
   display: block;
   margin: 0 auto 0 auto;
 }
+
+.images {
+  width: 75%;
+  display: flex;
+  margin: 32px auto 0 auto;
+  align-items: center;
+}
+
+.images img {
+  width: 100%;
+  min-width: 0;
+}
