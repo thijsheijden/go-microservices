@@ -26,8 +26,11 @@ form.addEventListener('submit', e => {
   // Set before image
   document.querySelector('#beforeImage').src = URL.createObjectURL(files[0]);
 
+  // Get the socket url
+  const socketURL = "ws://" + window.location.hostname + "/socket";
+
   // Open a websocket connection to the frontend socket endpoint
-  var socket = new WebSocket("ws://172.104.231.81/socket");
+  var socket = new WebSocket(socketURL);
 
   socket.onopen = function (e) {
     socket.send(files[0]);
@@ -36,5 +39,6 @@ form.addEventListener('submit', e => {
   socket.onmessage = function (e) {
     var imageURL = URL.createObjectURL(e.data);
     document.querySelector('#responseImage').src = imageURL;
+    socket.close();
   }
 })
